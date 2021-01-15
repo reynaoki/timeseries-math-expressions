@@ -1,5 +1,5 @@
 # timeseries-math-expressions
-A Jython module for using expressions to perform math operations on TimeSeriesMath objects (from Hydrologic Engineering Center).
+A Jython module that enables usage of math expressions to perform math operations on TimeSeriesMath objects (from Hydrologic Engineering Center).
 
 Original source code from https://nerdparadise.com/programming/parsemathexpr, which was written by Blake O'Hare. This code has been modified to accept variables as TimeSeriesMath objects.
 
