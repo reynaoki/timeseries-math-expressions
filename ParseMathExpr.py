@@ -89,8 +89,7 @@ class ParseMathExpr:
                 if char2 == '*':
                     self.index += 1
                     result = self.parseParenthesis()
-                    #values.append("*%s" %(result))
-                    values.append(['*', result])
+                    values.append(['**', result])
                 else:
                     result = self.parseParenthesis()
                     values.append(result)
@@ -126,7 +125,7 @@ class ParseMathExpr:
         i = 0
         while i < len(tempValues):
             if i+1 < len(tempValues):
-                if isinstance(tempValues[i+1], list) and tempValues[i+1][0] == '*':
+                if isinstance(tempValues[i+1], list) and tempValues[i+1][0] == '**':
                     if isinstance(tempValues[i], TimeSeriesMath):
                         factor = tempValues[i].exponentiation(tempValues[i+1][1])
                     else:
