@@ -1,7 +1,7 @@
 ##Source from https://nerdparadise.com/programming/parsemathexpr, by Blake O'Hare
 
 # A really simple expression evaluator supporting the
-# four basic math functions, parentheses, and variables.
+# six basic math functions (PEMDAS) and variables.
 
 #Edited to be able to handle TimeSeriesMath objects
 #By: Reyn Aoki
