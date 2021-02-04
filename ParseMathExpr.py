@@ -6,7 +6,7 @@
 #Edited to be able to handle TimeSeriesMath objects
 #By: Reyn Aoki
 #Email contact: reyn.a.aoki@usace.army.mil
-#Last updated: January 14, 2021
+#Last updated: February 4, 2021
 
 from hec.hecmath import TimeSeriesMath
 
@@ -85,8 +85,15 @@ class ParseMathExpr:
             char = self.peek()
             if char == '*':
                 self.index += 1
-                result = self.parseParenthesis()
-                values.append(result)
+                char2 = self.peek()
+                if char2 == '*':
+                    self.index += 1
+                    result = self.parseParenthesis()
+                    #values.append("*%s" %(result))
+                    values.append(['*', result])
+                else:
+                    result = self.parseParenthesis()
+                    values.append(result)
             elif char == '/':
                 div_index = self.index
                 self.index += 1
@@ -102,6 +109,7 @@ class ParseMathExpr:
                     values.append(1.0 / result)
             else:
                 break
+        values = self.parseExponent(values)
         value = 1.0
         for factor in values:
             if isinstance(factor, TimeSeriesMath):
@@ -111,7 +119,29 @@ class ParseMathExpr:
             else:
                 value *= factor
         return value
-    
+
+    def parseExponent(self, values):
+        tempValues = values
+        safeGuard = 0
+        i = 0
+        while i < len(tempValues):
+            if i+1 < len(tempValues):
+                if isinstance(tempValues[i+1], list) and tempValues[i+1][0] == '*':
+                    if isinstance(tempValues[i], TimeSeriesMath):
+                        factor = tempValues[i].exponentiation(tempValues[i+1][1])
+                    else:
+                        factor = tempValues[i] ** tempValues[i+1][1]
+                    tempValues[i] = factor
+                    del tempValues[i+1]
+                else:
+                    i += 1
+            else:
+                i += 1
+            safeGuard += 1
+            if safeGuard > 1000:
+                break
+        return tempValues
+
     def parseParenthesis(self):
         self.skipWhitespace()
         char = self.peek()
